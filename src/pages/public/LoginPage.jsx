@@ -26,13 +26,13 @@ const LoginPage = () => {
   };
 
   const fillDemoUser = () => {
-    setEmail('john.doe@example.com');
-    setPassword('User@123');
+    setEmail('raj@example.com');
+    setPassword('Password@123');
   };
 
   const fillDemoAdmin = () => {
     setEmail('admin@smartserve.com');
-    setPassword('Admin@123');
+    setPassword('Password@123');
   };
 
   return (

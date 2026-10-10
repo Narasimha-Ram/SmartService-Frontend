@@ -10,6 +10,7 @@ const getBaseUrl = () => {
 
 const api = axios.create({
   baseURL: getBaseUrl(),
+  timeout: 45000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -27,7 +28,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor for 401 handling
+// Response interceptor for 401 handling and friendly cold-start notices
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
@@ -38,7 +39,10 @@ api.interceptors.response.use(
         window.location.href = '/login';
       }
     }
-    const message = error.response?.data?.message || error.message || 'An error occurred';
+    let message = error.response?.data?.message || error.message || 'An error occurred';
+    if (!error.response && (error.message === 'Network Error' || error.code === 'ECONNABORTED')) {
+      message = 'Backend server is waking up or temporarily unreachable. Please wait 30 seconds and try again.';
+    }
     return Promise.reject(new Error(message));
   }
 );
